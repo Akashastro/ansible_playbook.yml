@@ -1,0 +1,23 @@
+---
+- name: Install Nginx
+  hosts: web_servers
+  become: true  # Run tasks with elevated privileges (sudo)
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'  # Conditional task for Debian-based systems
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present  # Ensure the package is installed
+      when: ansible_os_family == 'Debian'  # Conditional task for Debian-based systems
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started  # Ensure the service is started
+        enabled: yes    # Ensure the service starts on boot
+      when: ansible_os_family == 'Debian'  # Conditional task for Debian-based systems
